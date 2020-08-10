@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "388084547974",
+    "firebase_url": "https://dabyz1.firebaseio.com",
+    "project_id": "dabyz1",
+    "storage_bucket": "dabyz1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388084547974:android:31f840c8b05745805cac07",
+        "android_client_info": {
+          "package_name": "com.dabyz.dabyz1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzOt0IHn6lrLu2bH25bM96R3JFO8vIj1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388084547974:android:959bc9fca67663f85cac07",
+        "android_client_info": {
+          "package_name": "com.dabyz.greengrocery1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzOt0IHn6lrLu2bH25bM96R3JFO8vIj1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388084547974:android:b50fe8ce933ad8cc5cac07",
+        "android_client_info": {
+          "package_name": "com.dabyz.market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzOt0IHn6lrLu2bH25bM96R3JFO8vIj1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388084547974-hs34ge5pjji3kh58s0m6dg5hftddouhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
