@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miProducts"
+        android:icon="@drawable/ic_products"
+        android:title="Productos" />
+    <item
+        android:id="@+id/miCart"
+        android:icon="@drawable/ic_cart"
+        android:title="Pedidos" />
+    <item
+        android:id="@+id/miStores"
+        android:icon="@drawable/ic_home"
+        android:title="Tiendas" />
+</menu>
