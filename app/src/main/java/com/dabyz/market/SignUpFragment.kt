@@ -24,7 +24,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             )
              */
             main.supportFragmentManager.beginTransaction()
-                ?.apply { replace(R.id.flFragment, ProductsFragment(etMail.text.toString())); commit() }
+                .apply { replace(R.id.flFragment, ProductsFragment(etMail.text.toString())); commit() }
         }
         btnLogIn.setOnClickListener {
             Toast.makeText(context, "Not implemented yet", Toast.LENGTH_SHORT).show()
