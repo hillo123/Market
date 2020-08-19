@@ -15,12 +15,14 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
             //TODO("Form validations and save in firebase")
             main.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit()
                 ?.apply { putString("mail", etMail.text.toString()); commit() }
+            /*
             main.customerModel.addBusiness(
                 Customer(
                     etName.text.toString(), etMail.text.toString(), etPassword.text.toString(),
                     etPhone.text.toString(), etAddress.text.toString()
                 )
             )
+             */
             main.supportFragmentManager.beginTransaction()
                 .apply { replace(R.id.flFragment, ProductsFragment()); commit() }
         }

@@ -1,4 +1,4 @@
-package com.dabyz.market
+package com.dabyz.market.models
 
 import androidx.lifecycle.ViewModel
 
