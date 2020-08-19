@@ -1,16 +1,26 @@
 package com.dabyz.market
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.dabyz.market.models.Product
+import com.dabyz.market.models.StoreModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.card_product.view.*
+import kotlinx.android.synthetic.main.fragment_products.*
 
-class ProductsFragment(private val mail: String) : Fragment(R.layout.fragment_products) {
+class ProductsFragment() : Fragment(R.layout.fragment_products) {
     private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         main.txFragmentTitle.text = "Lista de Productos"
-        /*
-        main.storeModel.init(mail)
+        main.storeModel.init()
         var productsAdapter = ProductsListAdapter(main, main.storeModel)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(main)
@@ -19,19 +29,8 @@ class ProductsFragment(private val mail: String) : Fragment(R.layout.fragment_pr
         main.storeModel.selectedBusiness.observe(main as LifecycleOwner, Observer {
             productsAdapter.apply { products = it.refs; notifyDataSetChanged() }
         })
-        btnOrders.setOnClickListener {
-            Toast.makeText(context, "Orders not implemented yet", Toast.LENGTH_SHORT).show()
-        }
-        btnNewProduct.setOnClickListener {
-            main.supportFragmentManager?.beginTransaction()
-                ?.apply {
-                    replace(R.id.flFragment, NewProductFragment())
-                    addToBackStack(null)
-                    commit()
-                }
-        */
     }
-/*
+
     class ProductsListAdapter(val main: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
         var products = listOf<Product>()
 
@@ -48,9 +47,8 @@ class ProductsFragment(private val mail: String) : Fragment(R.layout.fragment_pr
 
             init {
                 itemView.setOnClickListener {
-                    main.supportFragmentManager.beginTransaction()
-                        ?.apply {
-                            replace(R.id.flFragment, EditProductFragment(product!!))
+                    main.supportFragmentManager.beginTransaction().apply {
+                            //replace(R.id.flFragment, EditProductFragment(product!!))
                             addToBackStack(null); commit()
                         }
                 }
@@ -68,6 +66,4 @@ class ProductsFragment(private val mail: String) : Fragment(R.layout.fragment_pr
             }
         }
     }
-
- */
 }
