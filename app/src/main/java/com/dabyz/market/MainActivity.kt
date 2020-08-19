@@ -1,16 +1,17 @@
 package com.dabyz.market
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.dabyz.market.models.StoreModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class MainActivity : AppCompatActivity() {
-    private val mail: String = "eamedina@gmail.com"
+    val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
     private val fragments = hashMapOf(
-        R.id.miCart to CartFragment(), R.id.miProducts to ProductsFragment(mail), R.id.miStores to StoresFragment()
+        R.id.miCart to CartFragment(), R.id.miProducts to ProductsFragment(), R.id.miStores to StoresFragment()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             if (mail == null)
                 replace(R.id.flFragment, SignUpFragment())
             else
-                replace(R.id.flFragment, ProductsFragment(mail))
+                replace(R.id.flFragment, ProductsFragment())
             commit()
         }
         bottomNavigationView.setOnNavigationItemSelectedListener {
