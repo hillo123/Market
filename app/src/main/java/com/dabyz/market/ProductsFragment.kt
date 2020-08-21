@@ -20,7 +20,6 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
     private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         main.txFragmentTitle.text = "Lista de Productos"
-        main.storeModel.init()
         var productsAdapter = ProductsListAdapter(main, main.storeModel)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(main)

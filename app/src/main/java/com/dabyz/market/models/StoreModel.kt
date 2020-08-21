@@ -15,14 +15,14 @@ data class Business(
 class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    private var mail = "eamedina@gmail.com"
+    var mail = ""
         set(value) {
-            field = value; init()
+            field = value;
+            initCurrentBusiness()
         }
 
     val selectedBusiness = MutableLiveData<Business>()
-
-    fun init() {
+    fun initCurrentBusiness() {
         businessListener?.remove()
         businessListener = dbBusiness.document(mail).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }

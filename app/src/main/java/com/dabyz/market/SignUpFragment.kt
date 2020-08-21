@@ -1,9 +1,9 @@
 package com.dabyz.market
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.dabyz.market.models.Customer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
@@ -13,16 +13,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         main.txFragmentTitle.text = "Nuevo Usuario"
         btnSignUp.setOnClickListener {
             //TODO("Form validations and save in firebase")
-            main.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit()
-                ?.apply { putString("mail", etMail.text.toString()); commit() }
-            /*
-            main.customerModel.addBusiness(
+            main.savePreferences(etMail.text.toString())
+            main.customerModel.addCustomer(
                 Customer(
                     etName.text.toString(), etMail.text.toString(), etPassword.text.toString(),
                     etPhone.text.toString(), etAddress.text.toString()
                 )
             )
-             */
             main.supportFragmentManager.beginTransaction()
                 .apply { replace(R.id.flFragment, ProductsFragment()); commit() }
         }

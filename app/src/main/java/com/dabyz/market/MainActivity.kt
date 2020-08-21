@@ -5,11 +5,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.dabyz.market.models.CustomerModel
 import com.dabyz.market.models.StoreModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class MainActivity : AppCompatActivity() {
     val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
+    val customerModel by lazy { ViewModelProvider(this).get(CustomerModel::class.java) }
+
+    fun initModels() {
+        customerModel.storeModel = storeModel
+        customerModel.mail = getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
+    }
+
+    fun savePreferences(mail: String) =
+        getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit()?.apply { putString("customerMail", mail); commit() }
+
     private val fragments = hashMapOf(
         R.id.miCart to CartFragment(), R.id.miProducts to ProductsFragment(), R.id.miStores to StoresFragment()
     )
@@ -17,9 +29,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initModels()
         supportFragmentManager.beginTransaction().apply {
-            val mail = getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("mail", null)
-            if (mail == null)
+            if (customerModel.mail == null)
                 replace(R.id.flFragment, SignUpFragment())
             else
                 replace(R.id.flFragment, ProductsFragment())
