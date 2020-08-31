@@ -11,7 +11,7 @@ class CustomerModel : ViewModel() {
 
     fun addCustomer(customer: Customer) {
         //TODO save customer to firebase
-        storeModel.mail = "eamedina@gmail.com"
+        storeModel.actualStore = "eamedina@gmail.com"
     }
 
 }

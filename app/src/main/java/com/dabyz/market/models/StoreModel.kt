@@ -15,7 +15,7 @@ data class Business(
 class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    var mail = ""
+    var actualStore = ""
         set(value) {
             field = value;
             initCurrentBusiness()
@@ -24,7 +24,7 @@ class StoreModel : ViewModel() {
     val selectedBusiness = MutableLiveData<Business>()
     fun initCurrentBusiness() {
         businessListener?.remove()
-        businessListener = dbBusiness.document(mail).addSnapshotListener { snapshot, e ->
+        businessListener = dbBusiness.document(actualStore).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }
             if (snapshot != null && snapshot.exists()) {
                 selectedBusiness.value = snapshot.toObject(Business::class.java)

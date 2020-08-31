@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private fun initModels() {
         customerModel.storeModel = storeModel
         customerModel.mail = getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
-        storeModel.mail = "eamedina@gmail.com"
+        storeModel.actualStore = "eamedina@gmail.com"
     }
 
     fun savePreferences(mail: String) =
