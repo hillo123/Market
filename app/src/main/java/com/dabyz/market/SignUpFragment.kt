@@ -16,7 +16,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         main.txFragmentTitle.text = "Nuevo Usuario"
         btnSignUp.setOnClickListener {
             //TODO("Form validations and save in firebase")
-            main.savePreferences(etMail.text.toString())
             main.customerModel.addCustomer(
                 Customer(
                     etName.text.toString(), etMail.text.toString(), etPassword.text.toString(),

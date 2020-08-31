@@ -13,15 +13,6 @@ class MainActivity : AppCompatActivity() {
     val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
     val customerModel by lazy { ViewModelProvider(this).get(CustomerModel::class.java) }
 
-    private fun initModels() {
-        customerModel.storeModel = storeModel
-        customerModel.mail = getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
-        storeModel.actualStore = "eamedina@gmail.com"
-    }
-
-    fun savePreferences(mail: String) =
-        getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit()?.apply { putString("customerMail", mail); commit() }
-
     private val fragments = hashMapOf(
         R.id.miCart to CartFragment(), R.id.miProducts to ProductsFragment(), R.id.miStores to StoresFragment()
     )
@@ -29,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initModels()
+        customerModel.init(this, storeModel)
         supportFragmentManager.beginTransaction().apply {
             if (customerModel.mail == null)
                 replace(R.id.flFragment, SignUpFragment())
