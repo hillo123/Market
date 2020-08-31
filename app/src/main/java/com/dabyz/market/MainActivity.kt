@@ -8,13 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.dabyz.market.models.CustomerModel
 import com.dabyz.market.models.StoreModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class MainActivity : AppCompatActivity() {
     val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
     val customerModel by lazy { ViewModelProvider(this).get(CustomerModel::class.java) }
 
-    fun initModels() {
+    private fun initModels() {
         customerModel.storeModel = storeModel
         customerModel.mail = getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
     }
@@ -38,8 +37,7 @@ class MainActivity : AppCompatActivity() {
             commit()
         }
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            supportFragmentManager.beginTransaction()
-                .apply { replace(R.id.flFragment, fragments[it.itemId] as Fragment); commit() }
+            supportFragmentManager.beginTransaction().apply { replace(R.id.flFragment, fragments[it.itemId] as Fragment); commit() }
             true
         }
     }
