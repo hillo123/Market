@@ -15,7 +15,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         main.bottomNavigationView.visibility = INVISIBLE
         main.txFragmentTitle.text = "Nuevo Usuario"
         btnSignUp.setOnClickListener {
-            //TODO("Form validations and save in firebase")
+            //TODO("Form validations")
             main.customerModel.addCustomer(
                 Customer(
                     etName.text.toString(), etMail.text.toString(), etPassword.text.toString(),
