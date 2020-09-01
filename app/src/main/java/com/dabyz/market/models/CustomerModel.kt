@@ -2,19 +2,26 @@ package com.dabyz.market.models
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 
-
-data class Customer(var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "", var actualStore: String = "eamedina@gmail.com")
+data class Customer(
+    var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
+    var actualStore: String = "eamedina@gmail.com", var stores: ArrayList<String> = arrayListOf<String>("eamedina@gmail.com", "")
+)// TODO actualStore and stores must be initialized empties and later filled whit the user interface
 
 class CustomerModel : ViewModel() {
+    private val dbBusiness = FirebaseFirestore.getInstance().collection("customers")
     lateinit var storeModel: StoreModel
     lateinit var ctx: Context
     var mail: String? = null
+    var customer: Customer? = null
 
     fun addCustomer(customer: Customer) {
+        this.customer = customer
         ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit().apply { putString("customerMail", customer.mail); commit() }
-        //TODO save customer to firebase
+        dbBusiness.document(customer.mail).set(customer)
         storeModel.actualStore = customer.actualStore
     }
 
@@ -22,6 +29,21 @@ class CustomerModel : ViewModel() {
         this.ctx = ctx
         this.storeModel = storeModel
         mail = ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
-        storeModel.actualStore = "eamedina@gmail.com"
+        mail?.let { getCustomer(mail!!) }
+        storeModel.actualStore = "eamedina@gmail.com" // TODO actual store must come from customer
+    }
+
+    private fun getCustomer(mail: String) {
+        dbBusiness.document(mail).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    customer = document.toObject(Customer::class.java)
+                } else {
+                    Log.d("CustomerModel", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("CustomerModel", "get failed with ", exception)
+            }
     }
 }
