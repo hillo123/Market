@@ -21,14 +21,14 @@ data class C2B(val business: String, val customer: String, var orders: ArrayList
 class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    var actualStore = ""
+    var actualStore:String? = null
         set(value) {
             field = value;
-            initCurrentBusiness()
+            value?.let { initCurrentBusiness(value) }
         }
 
     val selectedBusiness = MutableLiveData<Business>()
-    private fun initCurrentBusiness() {
+    private fun initCurrentBusiness(actualStore: String) {
         businessListener?.remove()
         businessListener = dbBusiness.document(actualStore).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }

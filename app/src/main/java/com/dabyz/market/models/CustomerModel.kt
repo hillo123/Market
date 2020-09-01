@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 data class Customer(
     var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
-    var actualStore: String = "eamedina@gmail.com", var stores: ArrayList<String> = arrayListOf<String>("eamedina@gmail.com", "")
+    var actualStore: String? = null, var stores: ArrayList<String> = arrayListOf<String>("eamedina@gmail.com", "")
 )// TODO actualStore and stores must be initialized empties and later filled whit the user interface
 
 class CustomerModel : ViewModel() {
@@ -30,7 +30,6 @@ class CustomerModel : ViewModel() {
         this.storeModel = storeModel
         mail = ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
         mail?.let { getCustomer(mail!!) }
-        storeModel.actualStore = "eamedina@gmail.com" // TODO actual store must come from customer
     }
 
     private fun getCustomer(mail: String) {
@@ -38,6 +37,7 @@ class CustomerModel : ViewModel() {
             .addOnSuccessListener { document ->
                 if (document != null) {
                     customer = document.toObject(Customer::class.java)
+                    storeModel.actualStore = customer?.actualStore
                 } else {
                     Log.d("CustomerModel", "No such document")
                 }
