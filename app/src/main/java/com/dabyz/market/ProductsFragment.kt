@@ -19,14 +19,15 @@ import kotlinx.android.synthetic.main.fragment_products.*
 class ProductsFragment() : Fragment(R.layout.fragment_products) {
     private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        main.txFragmentTitle.text = "Lista de Productos"
+        main.txFragmentTitle.text = "No hay tienda seleccionada"
         var productsAdapter = ProductsListAdapter(main, main.storeModel)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(main)
             adapter = productsAdapter
         }
-        main.storeModel.selectedBusiness.observe(main as LifecycleOwner, Observer {
-            productsAdapter.apply { products = it.refs; notifyDataSetChanged() }
+        main.storeModel.selectedBusiness.observe(main as LifecycleOwner, Observer { business ->
+            main.txFragmentTitle.text = business.name
+            productsAdapter.apply { products = business.refs; notifyDataSetChanged() }
         })
     }
 

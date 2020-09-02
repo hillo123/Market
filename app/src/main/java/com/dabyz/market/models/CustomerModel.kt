@@ -28,6 +28,7 @@ class CustomerModel : ViewModel() {
     fun init(ctx: Activity, storeModel: StoreModel) {
         this.ctx = ctx
         this.storeModel = storeModel
+        storeModel.customerModel = this
         mail = ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
         mail?.let { getCustomer(mail!!) }
     }

@@ -14,20 +14,26 @@ data class Business(
     var refs: ArrayList<Product> = ArrayList()
 )
 
-data class Line (val product:Product, var quantity:Int)
-data class Order (val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
-data class C2B(val business: String, val customer: String, var orders: ArrayList<Order> = ArrayList())
+data class Line(val product: Product, var quantity: Int)
+data class Order(val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
+data class C2B(val customer: String = "", val business: String = "", var orders: ArrayList<Order> = ArrayList())
 
 class StoreModel : ViewModel() {
+    lateinit var customerModel: CustomerModel
     private var businessListener: ListenerRegistration? = null
+    private var c2bListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    var actualStore:String? = null
+    private val dbC2Bs = FirebaseFirestore.getInstance().collection("c2bs")
+
+    var actualStore: String? = null
         set(value) {
             field = value;
             value?.let { initCurrentBusiness(value) }
         }
 
     val selectedBusiness = MutableLiveData<Business>()
+    val selectedC2B = MutableLiveData<C2B>()
+
     private fun initCurrentBusiness(actualStore: String) {
         businessListener?.remove()
         businessListener = dbBusiness.document(actualStore).addSnapshotListener { snapshot, e ->
@@ -36,6 +42,25 @@ class StoreModel : ViewModel() {
                 selectedBusiness.value = snapshot.toObject(Business::class.java)
             } else {
                 Log.d("Model", "Current data: null")
+            }
+        }
+        customerModel.customer?.let { initCurrentC2B(customerModel.customer!!, actualStore) }
+    }
+
+    private fun addC2B(c2b: C2B) = dbC2Bs.document(c2b.customer + "-" + c2b.business).set(c2b)
+
+    private fun initCurrentC2B(customer: Customer, business: String) {
+        // if Customer.stores not contain actualStore then create C2B and add to Customer.stores
+        if (!customer.stores.contains(business)) addC2B(C2B(customer.mail, business))
+
+        c2bListener?.remove()
+        c2bListener = dbC2Bs.document(customerModel.customer?.mail + "-" + business).addSnapshotListener { snapshot, e ->
+            e?.let { Log.w("StoreModel", "Listen failed.", e); return@addSnapshotListener }
+            if (snapshot != null && snapshot.exists()) {
+                selectedC2B.value = snapshot.toObject(C2B::class.java)
+                Log.e("StoreModel", "Current data: " + selectedC2B.value)
+            } else {
+                Log.e("StoreModel", "Current data: null") //TODO Is this line never executed?
             }
         }
     }
