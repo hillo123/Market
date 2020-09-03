@@ -50,12 +50,11 @@
             android:layout_margin="5dp"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/etStock"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnAdd2Cart"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:text="Añadir" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

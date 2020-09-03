@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dabyz.market.models.Product
-import com.dabyz.market.models.StoreModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
@@ -20,7 +19,7 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
     private val main by lazy { activity as MainActivity }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         main.txFragmentTitle.text = "No hay tienda seleccionada"
-        var productsAdapter = ProductsListAdapter(main, main.storeModel)
+        var productsAdapter = ProductsListAdapter()
         recyclerView.apply {
             layoutManager = LinearLayoutManager(main)
             adapter = productsAdapter
@@ -31,7 +30,7 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
         })
     }
 
-    class ProductsListAdapter(val main: MainActivity, val storeModel: StoreModel) : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
+    inner class ProductsListAdapter() : RecyclerView.Adapter<ProductsListAdapter.ItemHolder>() {
         var products = listOf<Product>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsListAdapter.ItemHolder =
@@ -40,21 +39,24 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
         override fun getItemCount(): Int = products.size
 
         override fun onBindViewHolder(holder: ProductsListAdapter.ItemHolder, position: Int) =
-            holder.setData(products[position], position)
+            holder.setData(products[position])
 
         inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             private var product: Product? = null
 
             init {
-                itemView.setOnClickListener {
+                /*itemView.setOnClickListener {
                     main.supportFragmentManager.beginTransaction().apply {
                             //replace(R.id.flFragment, EditProductFragment(product!!))
                             addToBackStack(null); commit()
                         }
+                }*/
+                itemView.btnAdd2Cart.setOnClickListener{
+                    main.storeModel.add2Cart(product)
                 }
             }
 
-            fun setData(product: Product?, pos: Int) {
+            fun setData(product: Product?) {
                 this.product = product as Product
                 product.apply {
                     itemView.etTitle.text = title

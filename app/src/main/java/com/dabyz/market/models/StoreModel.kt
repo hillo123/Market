@@ -64,4 +64,8 @@ class StoreModel : ViewModel() {
             }
         }
     }
+
+    fun add2Cart(product: Product?) {
+        Log.e("StoreModel", "add2Cart")
+    }
 }
