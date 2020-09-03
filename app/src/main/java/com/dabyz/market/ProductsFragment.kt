@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dabyz.market.models.Line
-import com.dabyz.market.models.Product
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
@@ -27,11 +26,9 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
         }
         main.storeModel.selectedBusiness.observe(main as LifecycleOwner, Observer { business ->
             main.txFragmentTitle.text = business.name
-            productsAdapter.apply {
-                // TODO enrich business.refs with cart
-                productQttys = business.refs.map { Line(it, 0) }
-                notifyDataSetChanged()
-            }
+        })
+        main.storeModel.productQttys.observe(main as LifecycleOwner, Observer { pqs ->
+            productsAdapter.apply { productQttys = pqs; notifyDataSetChanged() }
         })
     }
 

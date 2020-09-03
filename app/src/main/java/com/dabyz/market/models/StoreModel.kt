@@ -28,30 +28,48 @@ class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val dbC2Bs = FirebaseFirestore.getInstance().collection("c2bs")
-    private var selectedC2B: C2B? = null
+    var selectedC2B: C2B? = null
 
     var actualStore: String? = null
         set(value) {
             field = value;
-            value?.let { initCurrentBusiness(value) }
+            value?.let {
+                CoroutineScope(IO).launch {
+                    selectedC2B = getC2B()
+                    initCurrentBusiness(value)
+                }
+            }
         }
 
     val selectedBusiness = MutableLiveData<Business>()
+    val productQttys = MutableLiveData<List<Line>>()
+
+    private fun updateProductQttys() {
+        var pqs = selectedBusiness.value?.refs?.map { Line(it, 0) }
+        enrichQuantitiesWithCart(pqs!!)
+        productQttys.value = pqs
+    }
+
+    private fun enrichQuantitiesWithCart(productQttys: List<Line>) {
+        selectedC2B?.let {
+            productQttys.forEach { l ->
+                var cartLine = selectedC2B!!.cart.find { l.product == it.product }
+                cartLine?.let { l.quantity = it.quantity }
+            }
+        }
+    }
+
     private fun initCurrentBusiness(actualStore: String) {
         businessListener?.remove()
         businessListener = dbBusiness.document(actualStore).addSnapshotListener { snapshot, e ->
             e?.let { Log.w("Model", "Listen failed.", e); return@addSnapshotListener }
             if (snapshot != null && snapshot.exists()) {
                 selectedBusiness.value = snapshot.toObject(Business::class.java)
+                updateProductQttys()
             } else {
                 Log.d("Model", "Current data: null")
             }
         }
-    }
-
-    private suspend fun addC2B(c2b: C2B) = suspendCoroutine<Unit> { cont ->
-        dbC2Bs.document(c2b.customer + "-" + c2b.business).set(c2b)
-            .addOnSuccessListener { cont.resume(Unit) }.addOnFailureListener { cont.resume(Unit) }
     }
 
     private suspend fun getC2B() = suspendCoroutine<C2B?> { cont ->
@@ -59,14 +77,14 @@ class StoreModel : ViewModel() {
             .addOnSuccessListener { cont.resume(it.toObject(C2B::class.java)) }.addOnFailureListener { cont.resume(null) }
     }
 
-    fun add2Cart(product: Product, q: Int) = CoroutineScope(IO).launch {
-        if (selectedC2B == null) selectedC2B = getC2B()
+    fun add2Cart(product: Product, q: Int)  {
         if (selectedC2B == null) {
             selectedC2B = C2B(customerModel.customer.mail, actualStore!!)
             customerModel.customer.stores.add(actualStore!!)
         }
         val line = selectedC2B?.cart?.find { it.product == product }
         if (line == null) selectedC2B?.cart?.add(Line(product, q)) else line.quantity += q
-        addC2B(selectedC2B!!)
+        dbC2Bs.document(selectedC2B?.customer + "-" + selectedC2B?.business).set(selectedC2B!!)
+        updateProductQttys()
     }
 }
