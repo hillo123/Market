@@ -16,7 +16,7 @@ class CustomerModel : ViewModel() {
     lateinit var storeModel: StoreModel
     lateinit var ctx: Context
     var mail: String? = null
-    var customer: Customer? = null
+    lateinit var customer: Customer
 
     fun addCustomer(customer: Customer) {
         this.customer = customer
@@ -37,8 +37,8 @@ class CustomerModel : ViewModel() {
         dbBusiness.document(mail).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    customer = document.toObject(Customer::class.java)
-                    storeModel.actualStore = customer?.actualStore
+                    customer = document.toObject(Customer::class.java)!!
+                    storeModel.actualStore = customer.actualStore
                 } else {
                     Log.d("CustomerModel", "No such document")
                 }

@@ -42,29 +42,25 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
             holder.setData(products[position])
 
         inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var product: Product? = null
+            lateinit var product: Product
 
             init {
-                /*itemView.setOnClickListener {
-                    main.supportFragmentManager.beginTransaction().apply {
-                            //replace(R.id.flFragment, EditProductFragment(product!!))
-                            addToBackStack(null); commit()
-                        }
-                }*/
-                itemView.btnAdd2Cart.setOnClickListener{
-                    main.storeModel.add2Cart(product)
+                itemView.btnRemove2Cart.setOnClickListener {
+                    main.storeModel.add2Cart(product, -1)
+                }
+                itemView.btnAdd2Cart.setOnClickListener {
+                    main.storeModel.add2Cart(product, 1)
                 }
             }
 
-            fun setData(product: Product?) {
-                this.product = product as Product
+            fun setData(product: Product) {
+                this.product = product
                 product.apply {
                     itemView.etTitle.text = title
                     itemView.etTitle2.text = title2
                     itemView.etPrice.text = price.toString()
                     Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
-
             }
         }
     }
