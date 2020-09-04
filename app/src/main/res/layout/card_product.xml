@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="9dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="5dp"
     android:backgroundTint="@color/cardview_light_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -22,6 +23,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/linearLayout2"
+        android:layout_margin="5dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -29,44 +31,59 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/linearLayout1"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="18sp"
+            android:layout_margin="2dp"
+            android:capitalize="characters"
+            android:textSize="23sp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/etTitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
         <TextView
             android:id="@+id/etPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="18sp"
+            android:layout_margin="2dp"
+            android:textSize="22sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tvQtty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:textSize="18sp"
-            android:textStyle="bold" />
-        <Button
-            android:id="@+id/btnAdd2Cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Añadir" />
-        <Button
-            android:id="@+id/btnRemove2Cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quitar" />
+            android:textStyle="italic" /></LinearLayout>
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnAdd2Cart"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/custom_rounded_corners"
+        android:text="Añadir"
+        android:textColor="#3F51B5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2" />
+
+    <Button
+
+        android:id="@+id/btnRemove2Cart"
+        android:background="@drawable/custom_rounded_corners"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Quitar"
+        android:textColor="#3F51B5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd2Cart"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
