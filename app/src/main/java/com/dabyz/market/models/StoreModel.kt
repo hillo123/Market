@@ -7,7 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
@@ -28,14 +30,13 @@ class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val dbC2Bs = FirebaseFirestore.getInstance().collection("c2bs")
-    var selectedCart: Cart? = null
 
     var actualStore: String? = null
         set(value) {
             field = value;
             value?.let {
-                CoroutineScope(IO).launch {
-                    selectedCart = getC2B()
+                CoroutineScope(Main).launch {
+                    selectedCart.value = getC2B()
                     initCurrentBusiness(value)
                 }
             }
@@ -43,6 +44,7 @@ class StoreModel : ViewModel() {
 
     val selectedBusiness = MutableLiveData<Business>()
     val productQttys = MutableLiveData<List<Line>>()
+    var selectedCart = MutableLiveData<Cart>()
 
     private fun updateProductQttys() {
         var pqs = selectedBusiness.value?.refs?.map { Line(it, 0) }
@@ -51,9 +53,9 @@ class StoreModel : ViewModel() {
     }
 
     private fun enrichQuantitiesWithCart(productQttys: List<Line>) {
-        selectedCart?.let {
+        selectedCart.value?.let {
             productQttys.forEach { l ->
-                var cartLine = selectedCart!!.lines.find { l.product == it.product }
+                var cartLine = selectedCart.value?.lines!!.find { l.product == it.product }
                 cartLine?.let { l.quantity = it.quantity }
             }
         }
@@ -72,19 +74,23 @@ class StoreModel : ViewModel() {
         }
     }
 
-    private suspend fun getC2B() = suspendCoroutine<Cart?> { cont ->
-        dbC2Bs.document(customerModel.customer?.mail + "-" + actualStore).get()
-            .addOnSuccessListener { cont.resume(it.toObject(Cart::class.java)) }.addOnFailureListener { cont.resume(null) }
+    private suspend fun getC2B() = withContext(IO) {
+        suspendCoroutine<Cart?> { cont ->
+            dbC2Bs.document(customerModel.customer.mail + "-" + actualStore).get()
+                .addOnSuccessListener { cont.resume(it.toObject(Cart::class.java)) }.addOnFailureListener { cont.resume(null) }
+        }
     }
 
-    fun add2Cart(product: Product, q: Int)  {
-        if (selectedCart == null) {
-            selectedCart = Cart(customerModel.customer.mail, actualStore!!)
+    fun add2Cart(product: Product, q: Int) {
+        var cart = selectedCart.value
+        if (cart == null) {
+            cart = Cart(customerModel.customer.mail, actualStore!!)
             customerModel.customer.stores.add(actualStore!!)
         }
-        val line = selectedCart?.lines?.find { it.product == product }
-        if (line == null) selectedCart?.lines?.add(Line(product, q)) else line.quantity += q
-        dbC2Bs.document(selectedCart?.customer + "-" + selectedCart?.business).set(selectedCart!!)
+        val line = cart.lines?.find { it.product == product }
+        if (line == null) cart.lines?.add(Line(product, q)) else line.quantity += q
+        dbC2Bs.document(selectedCart.value?.customer + "-" + selectedCart.value?.business).set(selectedCart.value!!)
+        selectedCart.value = cart
         updateProductQttys()
     }
 }
