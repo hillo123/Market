@@ -17,7 +17,7 @@
     <LinearLayout
         android:id="@+id/llCheckout"
         android:layout_width="match_parent"
-        android:layout_height="150sp"
+        android:layout_height="140sp"
         android:orientation="vertical"
         android:src="@android:drawable/ic_menu_share"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,9 +37,9 @@
             android:id="@+id/btnCheckout"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:background="@drawable/custom_rounded_corners"
+            app:backgroundTint="@android:color/holo_green_dark"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:text="Comprar"
-            android:textColor="#3F51B5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout2" />
     </LinearLayout>
