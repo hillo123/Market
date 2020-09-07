@@ -48,7 +48,7 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
 
             init {
                 itemView.btnRemove2Cart.setOnClickListener {
-                    main.storeModel.add2Cart(productQtty.product!!, -1)
+                    if (productQtty.quantity >= 1) main.storeModel.add2Cart(productQtty.product!!, -1)
                 }
                 itemView.btnAdd2Cart.setOnClickListener {
                     main.storeModel.add2Cart(productQtty.product!!, 1)
@@ -59,7 +59,7 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
                 this.productQtty = productQtty
                 productQtty.product?.apply {
                     itemView.etTitle.text = title
-                    itemView.etTitle2.text = title2
+                    itemView.etTitle2.text = " /$title2"
                     itemView.etPrice.text = price.toString()
                     Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
