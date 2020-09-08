@@ -89,8 +89,8 @@ class StoreModel : ViewModel() {
         }
         val line = cart.lines?.find { it.product == product }
         if (line == null) cart.lines?.add(Line(product, q)) else line.quantity += q
-        dbC2Bs.document(selectedCart.value?.customer + "-" + selectedCart.value?.business).set(selectedCart.value!!)
         selectedCart.value = cart
+        dbC2Bs.document(selectedCart.value?.customer + "-" + selectedCart.value?.business).set(selectedCart.value!!)
         updateProductQttys()
     }
 }
