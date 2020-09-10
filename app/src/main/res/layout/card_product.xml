@@ -83,10 +83,10 @@
         android:id="@+id/tvQtty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:textStyle="italic"
         android:paddingLeft="10dp"
         android:paddingRight="44dp"
+        android:textSize="30sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/btnAdd2Cart"
         app:layout_constraintEnd_toEndOf="@+id/btnAdd2Cart" />
 
