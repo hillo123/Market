@@ -18,7 +18,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCart"
             android:layout_width="match_parent"
-            android:layout_height="497dp" />
+            android:layout_height="497dp"
+            tools:listitem="@layout/cart_line"/>
     </FrameLayout>
 
     <LinearLayout
