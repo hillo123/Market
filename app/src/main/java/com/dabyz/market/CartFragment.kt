@@ -1,6 +1,10 @@
 package com.dabyz.market
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Layout
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dabyz.market.models.Line
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.card_product.view.*
+import kotlinx.android.synthetic.main.card_product.view.btnAdd2Cart
+import kotlinx.android.synthetic.main.card_product.view.btnRemove2Cart
+import kotlinx.android.synthetic.main.card_product.view.etPrice
+import kotlinx.android.synthetic.main.card_product.view.etTitle
+import kotlinx.android.synthetic.main.card_product.view.etTitle2
+import kotlinx.android.synthetic.main.card_product.view.imgProduct
+import kotlinx.android.synthetic.main.card_product.view.tvQtty
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 class CartFragment : Fragment(R.layout.fragment_cart) {
@@ -46,6 +56,24 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             lateinit var productQtty: Line
 
             init {
+                btnCheckout.setOnClickListener {
+                    val builder = AlertDialog.Builder(context)
+                    val title = SpannableString("Confirmar pedido")
+                    title.setSpan(
+                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        0,
+                        title.length,
+                        0
+                    )
+                    builder.setTitle(title)
+                    builder.setMessage("Deseas confirmar el pedido.")
+                    builder.setPositiveButton("SI", null)
+                    builder.setNegativeButton("No", null)
+                    // Dejar solo dos botones o tres botones?
+                    builder.setNeutralButton("Cancelar", null)
+                    val dialog = builder.create()
+                    dialog.show()
+                }
                 itemView.btnRemove2Cart.setOnClickListener {
                     if (productQtty.quantity >= 1) main.storeModel.add2Cart(productQtty.product!!, -1)
                 }
