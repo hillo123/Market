@@ -105,7 +105,8 @@
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAdd2Cart" />
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd2Cart"
+        android:visibility="gone"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
