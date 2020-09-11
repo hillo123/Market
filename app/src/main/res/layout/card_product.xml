@@ -108,6 +108,7 @@
         android:layout_height="0dp"
         android:text="Quitar"
         android:textColor="#3F51B5"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnAdd2Cart"
         app:layout_constraintStart_toStartOf="@+id/linearLayout2" />
