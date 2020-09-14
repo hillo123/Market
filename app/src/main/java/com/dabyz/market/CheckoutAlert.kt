@@ -8,9 +8,11 @@ import android.text.style.AlignmentSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import com.dabyz.market.models.Order
 import kotlinx.android.synthetic.main.checkout_cart.view.*
+import kotlinx.android.synthetic.main.checkout_cart_delivery.view.*
 
-class CheckoutAlert(context: Context) : AlertDialog(context) {
+class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
     private lateinit var phone: String
     private lateinit var mail: String
 
@@ -32,8 +34,8 @@ class CheckoutAlert(context: Context) : AlertDialog(context) {
     init {
         val title = SpannableString("Confirmar pedido")
         title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.checkout_cart, null)
-        val checkoutAlert = Builder(context)
+        val dialogView = LayoutInflater.from(main).inflate(R.layout.checkout_cart, null)
+        val checkoutAlert = Builder(main)
             .setView(dialogView)
             .setTitle(title)
             .setNeutralButton("Cancelar", null)
@@ -41,8 +43,8 @@ class CheckoutAlert(context: Context) : AlertDialog(context) {
         checkoutAlert.show()
         dialogView.btnCheckoutStore.setOnClickListener {
             if (validateAndSave(dialogView)) {
-                Toast.makeText(context, "Solicitud de preparación enviada", Toast.LENGTH_LONG).show()
-                //TODO main.storeModel.addOrder(...
+                Toast.makeText(main, "Solicitud de preparación enviada", Toast.LENGTH_LONG).show()
+                main.storeModel.addOrder(phone, mail)
                 checkoutAlert.dismiss()
             }
         }
@@ -50,13 +52,15 @@ class CheckoutAlert(context: Context) : AlertDialog(context) {
             if (validateAndSave(dialogView)) {
                 val title = SpannableString("Confirmar pedido")
                 title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
-                Builder(context)
-                    .setView(LayoutInflater.from(context).inflate(R.layout.checkout_cart_delivery, null))
+                val deliveryView = LayoutInflater.from(main).inflate(R.layout.checkout_cart_delivery, null)
+                Builder(main)
+                    .setView(deliveryView)
                     .setTitle(title)
                     .setNeutralButton("Cancelar") { dialog, _ -> dialog.dismiss() }
                     .setPositiveButton("Enviar") { dialog, _ ->
-                        Toast.makeText(context, "Solicitud de pedido a domicilio enviada", Toast.LENGTH_LONG).show()
-                        //TODO main.storeModel.addOrder(...
+                        Toast.makeText(main, "Solicitud de pedido a domicilio enviada", Toast.LENGTH_LONG).show()
+                        //TODO validate Address
+                        main.storeModel.addOrder(phone, mail, deliveryView.etAddress.text.toString())
                         dialog.dismiss()
                     }
                     .create()

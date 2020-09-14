@@ -22,7 +22,7 @@ data class Business(
 )
 
 data class Line(var product: Product? = null, var quantity: Int = 0)
-data class Order(val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
+data class Order(var address: String = "", var customer: String = "", val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
 data class Cart(val customer: String = "", val business: String = "", var lines: ArrayList<Line> = ArrayList())
 
 class StoreModel : ViewModel() {
@@ -92,5 +92,12 @@ class StoreModel : ViewModel() {
         selectedCart.value = cart
         dbC2Bs.document(selectedCart.value?.customer + "-" + selectedCart.value?.business).set(selectedCart.value!!)
         updateProductQttys()
+    }
+
+    fun addOrder(phone: String, mail: String,address: String="") {
+        Log.e(null, "phone: $phone, mail: $mail, address: $address")
+        // TODO update phone and mail in Customer and add New Customer Address
+        // TODO save new Order
+        // TODO delete Cart
     }
 }
