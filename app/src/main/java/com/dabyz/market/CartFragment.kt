@@ -8,6 +8,7 @@ import android.text.style.AlignmentSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.dabyz.market.models.Line
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
+import kotlinx.android.synthetic.main.checkout_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 
@@ -37,25 +39,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         })
 
         btnCheckout.setOnClickListener {
-            val title = SpannableString("Confirmar pedido")
-            title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
-            AlertDialog.Builder(context)
-                .setView(LayoutInflater.from(main).inflate(R.layout.checkout_cart, null))
-                .setTitle(title)
-                .setNeutralButton("Cancelar", null)
-                .create().show()
-/*
-            delivery.setOnClickListener {
-                val title = SpannableString("Confirmar pedido")
-                title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
-                AlertDialog.Builder(main)
-                    .setView(LayoutInflater.from(main).inflate(R.layout.checkout_cart_delivery, null))
-                    .setTitle(title)
-                    .setNeutralButton("Cancelar", null)
-                    .create().show()
-            }
-*/
-
+            CheckoutAlert(main)
         }
     }
 
