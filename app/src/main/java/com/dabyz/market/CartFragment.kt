@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -19,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.dabyz.market.models.Line
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
-import kotlinx.android.synthetic.main.checkout_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 
@@ -28,8 +25,6 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         main.txFragmentTitle.text = "No hay tienda seleccionada"
         var cartAdapter = CartAdapter()
-
-//        var boton = clearFindViewById(R.id.btnCheckoutDelivery)
         rvCart.apply {
             layoutManager = LinearLayoutManager(main)
             adapter = cartAdapter
@@ -41,6 +36,27 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             cartAdapter.notifyDataSetChanged()
         })
 
+        btnCheckout.setOnClickListener {
+            val title = SpannableString("Confirmar pedido")
+            title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
+            AlertDialog.Builder(context)
+                .setView(LayoutInflater.from(main).inflate(R.layout.checkout_cart, null))
+                .setTitle(title)
+                .setNeutralButton("Cancelar", null)
+                .create().show()
+/*
+            delivery.setOnClickListener {
+                val title = SpannableString("Confirmar pedido")
+                title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
+                AlertDialog.Builder(main)
+                    .setView(LayoutInflater.from(main).inflate(R.layout.checkout_cart_delivery, null))
+                    .setTitle(title)
+                    .setNeutralButton("Cancelar", null)
+                    .create().show()
+            }
+*/
+
+        }
     }
 
 
@@ -56,59 +72,10 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             lateinit var productQtty: Line
-            var prueba = layoutInflater.inflate(R.layout.checkout_cart, null)
-            val Buatton = prueba.btnCheckoutDelivery
-            val textView: Button = prueba.findViewById(R.id.btnCheckoutStore)
 
             init {
-
-                prueba.btnCheckoutDelivery?.setOnClickListener {
-                    Log.e("delivery", "este es solo el log")
-
-
-                }
-
-
-                btnCheckout.setOnClickListener {
-                    Log.e("delivery1", "llegamos hasta aca1")
-                    val mDialogView = LayoutInflater.from(main).inflate(R.layout.checkout_cart, null)
-                    val builder = AlertDialog.Builder(context)
-                        .setView(mDialogView)
-                    val title = SpannableString("Confirmar pedido")
-                    title.setSpan(
-                        AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-                        0,
-                        title.length,
-                        0
-                    )
-                    builder.setTitle(title)
-                    builder.setNeutralButton("Cancelar", null)
-                    val dialog = builder.create()
-                    val delivery: Button = prueba.findViewById(R.id.btnCheckoutDelivery)
-                    delivery.setOnClickListener {
-
-                        Log.e("delivery", "llegamos hasta aca")
-                        val mDialogDelivery = LayoutInflater.from(main).inflate(R.layout.checkout_cart_delivery, null)
-                        val constructor = AlertDialog.Builder(main)
-                            .setView(mDialogDelivery)
-                        val dialog = SpannableString("Confirmar pedido")
-                        dialog.setSpan(
-                            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
-                            0,
-                            dialog.length,
-                            0
-                        )
-                        constructor.setTitle(dialog)
-                        constructor.setNeutralButton("Cancelar", null)
-                        val aldo = constructor.create()
-                        aldo.show()
-                    }
-                    dialog.show()
-
-                }
-
                 itemView.btnRemove2Cart.setOnClickListener {
-                    if (productQtty.quantity >= 1) main.storeModel.add2Cart(productQtty.product!!, -1)
+                    main.storeModel.add2Cart(productQtty.product!!, -1)
                 }
                 itemView.btnAdd2Cart.setOnClickListener {
                     main.storeModel.add2Cart(productQtty.product!!, 1)
@@ -124,16 +91,8 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                     Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
                 itemView.tvQtty.text = cartLine.quantity.toString()
-                hideShowBtnRemove2Cart()
-            }
-
-            val checkout = itemView.btnRemove2Cart
-            private fun hideShowBtnRemove2Cart() {
-                if (productQtty.quantity.toString() > "0") {
-                    checkout.visibility = View.VISIBLE;
-                } else {
-                    checkout.visibility = View.GONE;
-                }
+                itemView.btnRemove2Cart.visibility =
+                    if (productQtty.quantity.toString() > "0") View.VISIBLE else View.GONE
             }
         }
     }
