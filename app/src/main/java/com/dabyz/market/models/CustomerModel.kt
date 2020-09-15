@@ -47,4 +47,7 @@ class CustomerModel : ViewModel() {
                 Log.e("CustomerModel", "get failed with ", exception)
             }
     }
+
+    fun updateCustomer(phone: String, mail: String, address: String) = dbBusiness.document(mail).update(mapOf("phone" to phone, "address" to address))
+
 }

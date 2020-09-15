@@ -1,5 +1,6 @@
 package com.dabyz.market.models
 
+
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,7 @@ class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val dbC2Bs = FirebaseFirestore.getInstance().collection("c2bs")
+    private val ordersC2B = FirebaseFirestore.getInstance().collection("orders")
 
     var actualStore: String? = null
         set(value) {
@@ -94,10 +96,17 @@ class StoreModel : ViewModel() {
         updateProductQttys()
     }
 
-    fun addOrder(phone: String, mail: String,address: String="") {
-        Log.e(null, "phone: $phone, mail: $mail, address: $address")
+    fun addOrder(phone: String, mail: String, address: String = "") {
         // TODO update phone and mail in Customer and add New Customer Address
+        customerModel.updateCustomer(phone, mail, address)
         // TODO save new Order
+        ordersC2B.document(selectedCart.value?.customer.toString()).set(selectedCart.value!!)
         // TODO delete Cart
+//        EN REVISIÓN
+//        ordersC2B.document(selectedCart.value?.customer.toString()).delete()
+    }
+
+    fun deleteCart() {
+
     }
 }
