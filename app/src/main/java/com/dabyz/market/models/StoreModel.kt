@@ -89,10 +89,14 @@ class StoreModel : ViewModel() {
             cart = Cart(customerModel.customer.mail, actualStore!!)
             customerModel.customer.stores.add(actualStore!!)
         }
-        val line = cart.lines?.find { it.product == product }
-        if (line == null) cart.lines?.add(Line(product, q)) else line.quantity += q
+        val line = cart.lines.find { it.product == product }
+        if (line == null) cart.lines.add(Line(product, q))
+        else {
+            line.quantity += q
+            if (line.quantity <= 0) cart.lines.remove(line)
+        }
+        dbC2Bs.document(cart.customer + "-" + cart.business).set(cart)
         selectedCart.value = cart
-        dbC2Bs.document(selectedCart.value?.customer + "-" + selectedCart.value?.business).set(selectedCart.value!!)
         updateProductQttys()
     }
 
