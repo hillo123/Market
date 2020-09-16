@@ -1,14 +1,9 @@
 package com.dabyz.market
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.text.Layout
-import android.text.SpannableString
-import android.text.style.AlignmentSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -18,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.dabyz.market.models.Line
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.card_product.view.*
-import kotlinx.android.synthetic.main.checkout_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 
@@ -37,12 +31,8 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         main.storeModel.selectedCart.observe(main as LifecycleOwner, Observer {
             cartAdapter.notifyDataSetChanged()
         })
-
-        btnCheckout.setOnClickListener {
-            CheckoutAlert(main)
-        }
+        btnCheckout.setOnClickListener { CheckoutAlert(main) }
     }
-
 
     inner class CartAdapter() : RecyclerView.Adapter<CartAdapter.ItemHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartAdapter.ItemHolder =

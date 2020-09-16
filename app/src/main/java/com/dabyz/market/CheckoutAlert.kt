@@ -4,18 +4,21 @@ import android.app.AlertDialog
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.checkout_cart.view.*
 import kotlinx.android.synthetic.main.checkout_cart_delivery.view.*
 import kotlinx.android.synthetic.main.custom_toast.*
+import kotlinx.android.synthetic.main.custom_toast.view.*
 import kotlinx.android.synthetic.main.custom_toast_validating.*
 
-
 class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
+    private fun fancyToast(layout: Int) = Toast(context).apply {
+        duration = Toast.LENGTH_LONG
+        view = layoutInflater.inflate(layout, clToastValidate)
+        show()
+    }
     private lateinit var phone: String
     private lateinit var mail: String
     private fun validateAndSave(dialogView: View): Boolean {
@@ -23,28 +26,18 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
         mail = dialogView.etMail.editText?.text.toString()
         if (phone.isEmpty()) {
             //TODO completar validaciones de telefono
-            Toast(context).apply {
-                duration = Toast.LENGTH_LONG
-                view = layoutInflater.inflate(R.layout.custom_toast_validating, clToastValidate)
-                show()
-            }
+            fancyToast(R.layout.custom_toast_validating)
             return false
         }
-
         if (mail.isEmpty()) {
             //TODO completar validaciones de Mail
-            Toast(context).apply {
-                duration = Toast.LENGTH_LONG
-                view = layoutInflater.inflate(R.layout.custom_toast_validating, clToastValidate)
-                show()
-            }
+            fancyToast(R.layout.custom_toast_validating)
             return false
         }
         return true
     }
 
     init {
-
         val title = SpannableString("Confirmar pedido")
         title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
         val dialogView = LayoutInflater.from(main).inflate(R.layout.checkout_cart, null)
@@ -55,12 +48,11 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
             .create()
         checkoutAlert.show()
         dialogView.btnCheckoutStore.setOnClickListener {
-
             if (validateAndSave(dialogView)) {
                 Toast(context).apply {
                     duration = Toast.LENGTH_LONG
                     view = layoutInflater.inflate(R.layout.custom_toast, clToast)
-                    view.findViewById<TextView>(R.id.tvToastPositive).setText("Solicitud de preparación enviada")
+                    view.tvToastPositive.text = "Solicitud de preparación enviada"
                     show()
                 }
                 main.storeModel.addOrder(phone, mail)
@@ -86,8 +78,7 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
                         main.storeModel.addOrder(phone, mail, deliveryView.etAddressCheckout.editText?.text.toString())
                         dialog.dismiss()
                     }
-                    .create()
-                    .show()
+                    .create().show()
                 checkoutAlert.dismiss()
             }
         }
