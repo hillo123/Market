@@ -65,8 +65,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                     Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
                 itemView.tvQtty.text = cartLine.quantity.toString()
-                itemView.btnRemove2Cart.visibility =
-                    if (productQtty.quantity.toString() > "0") View.VISIBLE else View.GONE
+                itemView.btnRemove2Cart.visibility = if (productQtty.quantity > 0) View.VISIBLE else View.GONE
             }
         }
     }
