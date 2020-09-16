@@ -97,9 +97,11 @@ class StoreModel : ViewModel() {
     }
 
     fun addOrder(phone: String, mail: String, address: String = "") {
+        Log.e(null, phone + mail + address)
         // TODO update phone and mail in Customer and add New Customer Address
         customerModel.updateCustomer(phone, mail, address)
         // TODO save new Order
+        //Toma el correo que esta registrado en el signUP
         ordersC2B.document(selectedCart.value?.customer.toString()).set(selectedCart.value!!)
         // TODO delete Cart
 //        EN REVISIÓN
