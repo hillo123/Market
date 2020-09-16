@@ -10,25 +10,25 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     val storeModel by lazy { ViewModelProvider(this).get(StoreModel::class.java) }
-    val customerModel by lazy { ViewModelProvider(this).get(CustomerModel::class.java) }
-
-    private val fragments = hashMapOf(
-        R.id.miCart to CartFragment(), R.id.miProducts to ProductsFragment(), R.id.miStores to StoresFragment()
-    )
+    private val customerModel by lazy { ViewModelProvider(this).get(CustomerModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         customerModel.init(this, storeModel)
-        supportFragmentManager.beginTransaction().apply {
-            if (customerModel.mail == null)
-                replace(R.id.flFragment, SignUpFragment())
-            else
-                replace(R.id.flFragment, ProductsFragment())
-            commit()
-        }
+        supportFragmentManager.beginTransaction().apply { replace(R.id.flFragment, ProductsFragment()); commit() }
+
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            supportFragmentManager.beginTransaction().apply { replace(R.id.flFragment, fragments[it.itemId] as Fragment); commit() }
+            supportFragmentManager.beginTransaction().apply {
+                supportFragmentManager.beginTransaction().apply {
+                    when (it.itemId) {
+                        R.id.miCart -> replace(R.id.flFragment, CartFragment())
+                        R.id.miProducts -> replace(R.id.flFragment, ProductsFragment())
+                        R.id.miStores -> replace(R.id.flFragment, StoresFragment())
+                    }
+                    commit()
+                }
+            }
             true
         }
     }

@@ -30,7 +30,7 @@ class StoreModel : ViewModel() {
     lateinit var customerModel: CustomerModel
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    private val dbC2Bs = FirebaseFirestore.getInstance().collection("c2bs")
+    private val carts = FirebaseFirestore.getInstance().collection("carts")
     private val ordersC2B = FirebaseFirestore.getInstance().collection("orders")
 
     var actualStore: String? = null
@@ -78,7 +78,7 @@ class StoreModel : ViewModel() {
 
     private suspend fun getC2B() = withContext(IO) {
         suspendCoroutine<Cart?> { cont ->
-            dbC2Bs.document(customerModel.customer.mail + "-" + actualStore).get()
+            carts.document(customerModel.customerId + "-" + actualStore).get()
                 .addOnSuccessListener { cont.resume(it.toObject(Cart::class.java)) }.addOnFailureListener { cont.resume(null) }
         }
     }
@@ -95,7 +95,7 @@ class StoreModel : ViewModel() {
             line.quantity += q
             if (line.quantity <= 0) cart.lines.remove(line)
         }
-        dbC2Bs.document(cart.customer + "-" + cart.business).set(cart)
+        carts.document(customerModel.customerId + "-" + cart.business).set(cart)
         selectedCart.value = cart
         updateProductQttys()
     }

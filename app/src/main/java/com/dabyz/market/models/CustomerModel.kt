@@ -15,26 +15,27 @@ class CustomerModel : ViewModel() {
     private val dbBusiness = FirebaseFirestore.getInstance().collection("customers")
     lateinit var storeModel: StoreModel
     lateinit var ctx: Context
-    var mail: String? = null
+    var customerId: String? = null
     lateinit var customer: Customer
 
-    fun addCustomer(customer: Customer) {
-        this.customer = customer
-        ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit().apply { putString("customerMail", customer.mail); commit() }
-        dbBusiness.document(customer.mail).set(customer)
-        storeModel.actualStore = customer.actualStore
+    fun addCustomer() {
+        customer = Customer()
+        var doc = dbBusiness.document()
+        customerId = doc.id
+        ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).edit().apply { putString("customerId", customerId); commit() }
+        doc.set(customer)
     }
 
     fun init(ctx: Activity, storeModel: StoreModel) {
         this.ctx = ctx
         this.storeModel = storeModel
         storeModel.customerModel = this
-        mail = ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerMail", null)
-        mail?.let { getCustomer(mail!!) }
+        customerId = ctx.getSharedPreferences("dabyz.market", Context.MODE_PRIVATE).getString("customerId", null)
+        if (customerId == null) addCustomer() else getCustomer(customerId!!)
     }
 
-    private fun getCustomer(mail: String) {
-        dbBusiness.document(mail).get()
+    private fun getCustomer(id: String) {
+        dbBusiness.document(id).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     customer = document.toObject(Customer::class.java)!!
