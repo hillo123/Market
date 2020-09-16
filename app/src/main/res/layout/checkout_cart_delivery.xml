@@ -6,25 +6,15 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <RadioGroup
-        android:id="@+id/filter_group"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etAddressCheckout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
+        android:hint="Introduzca su Dirección">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Introduzca su Dirección:"
-            android:textColor="#000"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/etAddress"
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
-    </RadioGroup>
+    7</com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

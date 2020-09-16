@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -18,8 +19,8 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
     private lateinit var phone: String
     private lateinit var mail: String
     private fun validateAndSave(dialogView: View): Boolean {
-        phone = dialogView.etPhone.text.toString()
-        mail = dialogView.etMail.text.toString()
+        phone = dialogView.etPhone.editText?.text.toString()
+        mail = dialogView.etMail.editText?.text.toString()
         if (phone.isEmpty()) {
             //TODO completar validaciones de telefono
             Toast(context).apply {
@@ -68,12 +69,12 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
         }
         dialogView.btnCheckoutDelivery.setOnClickListener {
             if (validateAndSave(dialogView)) {
-                val titleOne = SpannableString("Confirmar pedido")
-                titleOne.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, titleOne.length, 0)
+                val title = SpannableString("Confirmar pedido")
+                title.setSpan(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, title.length, 0)
                 val deliveryView = LayoutInflater.from(main).inflate(R.layout.checkout_cart_delivery, null)
                 Builder(main)
                     .setView(deliveryView)
-                    .setTitle(titleOne)
+                    .setTitle(title)
                     .setNeutralButton("Cancelar") { dialog, _ -> dialog.dismiss() }
                     .setPositiveButton("Enviar") { dialog, _ ->
                         Toast(main).apply {
@@ -82,7 +83,7 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
                             show()
                         }
                         //TODO validate Address
-                        main.storeModel.addOrder(phone, mail, deliveryView.etAddress.text.toString())
+                        main.storeModel.addOrder(phone, mail, deliveryView.etAddressCheckout.editText?.text.toString())
                         dialog.dismiss()
                     }
                     .create()
