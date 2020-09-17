@@ -21,10 +21,11 @@ data class Business(
     var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
     var refs: ArrayList<Product> = ArrayList()
 )
-
+data class LineStores(var stores: Business? = null)
 data class Line(var product: Product? = null, var quantity: Int = 0)
 data class Order(var address: String = "", var customer: String = "", val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
 data class Cart(val customer: String = "", val business: String = "", var lines: ArrayList<Line> = ArrayList())
+
 
 class StoreModel : ViewModel() {
     lateinit var customerModel: CustomerModel
@@ -43,10 +44,22 @@ class StoreModel : ViewModel() {
                 }
             }
         }
+    var listStores: String? = null
+        set(value) {
+            field = value;
+            value?.let {
+                CoroutineScope(Main).launch {
+                    allBusiness.value = getStores()
+                }
+            }
+        }
+
 
     val selectedBusiness = MutableLiveData<Business>()
     val productQttys = MutableLiveData<List<Line>>()
+    val lineBusiness = MutableLiveData<List<LineStores>>()
     var selectedCart = MutableLiveData<Cart>()
+    var allBusiness = MutableLiveData<Business>()
 
     private fun updateProductQttys() {
         var pqs = selectedBusiness.value?.refs?.map { Line(it, 0) }
@@ -73,6 +86,13 @@ class StoreModel : ViewModel() {
             } else {
                 Log.d("Model", "Current data: null")
             }
+        }
+    }
+
+    private suspend fun getStores() = withContext(IO) {
+        suspendCoroutine<Business?> { cont ->
+            dbBusiness.document().get()
+                .addOnSuccessListener { cont.resume(it.toObject(Business::class.java)) }.addOnFailureListener { cont.resume(null) }
         }
     }
 
