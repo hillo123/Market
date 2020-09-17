@@ -21,6 +21,7 @@ data class Business(
     var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
     var refs: ArrayList<Product> = ArrayList()
 )
+
 data class LineStores(var stores: Business? = null)
 data class Line(var product: Product? = null, var quantity: Int = 0)
 data class Order(var address: String = "", var customer: String = "", val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
@@ -32,34 +33,23 @@ class StoreModel : ViewModel() {
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
     private val carts = FirebaseFirestore.getInstance().collection("carts")
-    private val ordersC2B = FirebaseFirestore.getInstance().collection("orders")
+    private val orders = FirebaseFirestore.getInstance().collection("orders")
 
     var actualStore: String? = null
         set(value) {
             field = value;
             value?.let {
                 CoroutineScope(Main).launch {
-                    selectedCart.value = getC2B()
+                    selectedCart.value = getCart()
                     initCurrentBusiness(value)
                 }
             }
         }
-    var listStores: String? = null
-        set(value) {
-            field = value;
-            value?.let {
-                CoroutineScope(Main).launch {
-                    allBusiness.value = getStores()
-                }
-            }
-        }
-
 
     val selectedBusiness = MutableLiveData<Business>()
     val productQttys = MutableLiveData<List<Line>>()
-    val lineBusiness = MutableLiveData<List<LineStores>>()
     var selectedCart = MutableLiveData<Cart>()
-    var allBusiness = MutableLiveData<Business>()
+    var allBusiness = MutableLiveData<List<Business>>()
 
     private fun updateProductQttys() {
         var pqs = selectedBusiness.value?.refs?.map { Line(it, 0) }
@@ -89,14 +79,11 @@ class StoreModel : ViewModel() {
         }
     }
 
-    private suspend fun getStores() = withContext(IO) {
-        suspendCoroutine<Business?> { cont ->
-            dbBusiness.document().get()
-                .addOnSuccessListener { cont.resume(it.toObject(Business::class.java)) }.addOnFailureListener { cont.resume(null) }
+    fun getStores() = dbBusiness.get().addOnSuccessListener { docs ->
+            allBusiness.value = docs.map { it.toObject(Business::class.java) }
         }
-    }
 
-    private suspend fun getC2B() = withContext(IO) {
+    private suspend fun getCart() = withContext(IO) {
         suspendCoroutine<Cart?> { cont ->
             carts.document(customerModel.customerId + "-" + actualStore).get()
                 .addOnSuccessListener { cont.resume(it.toObject(Cart::class.java)) }.addOnFailureListener { cont.resume(null) }
@@ -126,7 +113,7 @@ class StoreModel : ViewModel() {
         customerModel.updateCustomer(phone, mail, address)
         // TODO save new Order
         //Toma el correo que esta registrado en el signUP
-        ordersC2B.document(selectedCart.value?.customer.toString()).set(selectedCart.value!!)
+        orders.document(selectedCart.value?.customer.toString()).set(selectedCart.value!!)
         // TODO delete Cart
 //        EN REVISIÓN
 //        ordersC2B.document(selectedCart.value?.customer.toString()).delete()
