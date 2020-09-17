@@ -32,4 +32,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
+
+    fun nav2Products() {
+        bottomNavigationView.menu.getItem(0).isChecked = true
+        supportFragmentManager.beginTransaction().apply { replace(R.id.flFragment, ProductsFragment()); commit() }
+    }
 }

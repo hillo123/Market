@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dabyz.market.models.Business
-import com.dabyz.market.models.LineStores
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stores.*
 import kotlinx.android.synthetic.main.stores_lines.view.*
 
@@ -24,29 +24,31 @@ class StoresFragment() : Fragment(R.layout.fragment_stores) {
             adapter = storesAdapter
         }
         main.storeModel.allBusiness.observe(main as LifecycleOwner, Observer {
-            storesAdapter.apply { this.business = it; notifyDataSetChanged() }
+            storesAdapter.apply { this.businesses = it; notifyDataSetChanged() }
         })
     }
 
     inner class StoresListAdapter() : RecyclerView.Adapter<StoresListAdapter.ItemHolder>() {
-        var business = listOf<Business>()
+        var businesses = listOf<Business>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoresListAdapter.ItemHolder =
             ItemHolder(LayoutInflater.from(main).inflate(R.layout.stores_lines, parent, false))
 
-        override fun getItemCount(): Int = business.size
+        override fun getItemCount(): Int = businesses.size
 
-        override fun onBindViewHolder(holder: StoresListAdapter.ItemHolder, position: Int) =
-            holder.setData(business[position])
+        override fun onBindViewHolder(holder: StoresListAdapter.ItemHolder, position: Int) {
+            holder.business = businesses[position]
+            holder.itemView.etTitleStores.text = holder.business.name
+        }
 
         inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            lateinit var business: Business
+
             init {
-
-            }
-
-            fun setData(business: Business) {
-                itemView.etTitleStores.text = business.name
-                //TODO show address
+                itemView.setOnClickListener {
+                    main.storeModel.actualStore = business.mail
+                    main.nav2Products()
+                }
             }
         }
     }
