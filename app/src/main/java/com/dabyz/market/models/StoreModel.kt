@@ -21,10 +21,8 @@ data class Business(
     var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
     var refs: ArrayList<Product> = ArrayList()
 )
-
-data class LineStores(var stores: Business? = null)
 data class Line(var product: Product? = null, var quantity: Int = 0)
-data class Order(var address: String = "", var customer: String = "", val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
+data class Order(var address: String = "", var customerId: String = "", val date: Date = Date(), var orderLines: ArrayList<Line> = ArrayList())
 data class Cart(val customer: String = "", val business: String = "", var lines: ArrayList<Line> = ArrayList())
 
 
@@ -32,8 +30,8 @@ class StoreModel : ViewModel() {
     lateinit var customerModel: CustomerModel
     private var businessListener: ListenerRegistration? = null
     private val dbBusiness = FirebaseFirestore.getInstance().collection("greengrocery")
-    private val carts = FirebaseFirestore.getInstance().collection("carts")
-    private val orders = FirebaseFirestore.getInstance().collection("orders")
+    private val dbCarts = FirebaseFirestore.getInstance().collection("carts")
+    private val dbOrders = FirebaseFirestore.getInstance().collection("orders")
 
     var actualStore: String? = null
         set(value) {
@@ -80,12 +78,12 @@ class StoreModel : ViewModel() {
     }
 
     fun getStores() = dbBusiness.get().addOnSuccessListener { docs ->
-            allBusiness.value = docs.map { it.toObject(Business::class.java) }
-        }
+        allBusiness.value = docs.map { it.toObject(Business::class.java) }
+    }
 
     private suspend fun getCart() = withContext(IO) {
         suspendCoroutine<Cart?> { cont ->
-            carts.document(customerModel.customerId + "-" + actualStore).get()
+            dbCarts.document(customerModel.customerId + "-" + actualStore).get()
                 .addOnSuccessListener { cont.resume(it.toObject(Cart::class.java)) }.addOnFailureListener { cont.resume(null) }
         }
     }
@@ -102,18 +100,15 @@ class StoreModel : ViewModel() {
             line.quantity += q
             if (line.quantity <= 0) cart.lines.remove(line)
         }
-        carts.document(customerModel.customerId + "-" + cart.business).set(cart)
+        dbCarts.document(customerModel.customerId + "-" + cart.business).set(cart)
         selectedCart.value = cart
         updateProductQttys()
     }
 
     fun addOrder(phone: String, mail: String, address: String = "") {
-        Log.e(null, phone + mail + address)
-        // TODO update phone and mail in Customer and add New Customer Address
         customerModel.updateCustomer(phone, mail, address)
-        // TODO save new Order
-        //Toma el correo que esta registrado en el signUP
-        orders.document(selectedCart.value?.customer.toString()).set(selectedCart.value!!)
+        dbOrders.document(customerModel.customerId + "-" + actualStore).set(selectedCart.value!!)
+        // TODO save Order instead of cart
         // TODO delete Cart
 //        EN REVISIÓN
 //        ordersC2B.document(selectedCart.value?.customer.toString()).delete()

@@ -2,13 +2,15 @@ package com.dabyz.market.models
 
 import android.app.Activity
 import android.content.Context
+import android.net.InetAddresses
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 data class Customer(
-    var name: String = "", val mail: String = "", var password: String = "", var phone: String = "", var address: String = "",
-    var actualStore: String? = null, var stores: ArrayList<String> = arrayListOf<String>("eamedina@gmail.com", "")
+    var name: String = "", var mail: String = "", var password: String = "", var phone: String = "",
+    var addresses: ArrayList<String> = ArrayList(), var actualStore: String? = null,
+    var stores: ArrayList<String> = ArrayList()
 )// TODO actualStore and stores must be initialized empties and later filled whit the user interface
 
 class CustomerModel : ViewModel() {
@@ -49,6 +51,13 @@ class CustomerModel : ViewModel() {
             }
     }
 
-    fun updateCustomer(phone: String, mail: String, address: String) = dbBusiness.document(mail).update(mapOf("phone" to phone, "address" to address))
+    fun updateCustomer(phone: String, mail: String, address: String) {
+        customer.phone = phone
+        customer.mail = mail
+        customer.addresses.add(address)
+        customer.stores.add(0, storeModel.actualStore!!)
+        dbBusiness.document(mail).update(mapOf("phone" to phone, "address" to address))
+    }
+
 
 }
