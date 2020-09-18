@@ -100,21 +100,21 @@ class StoreModel : ViewModel() {
             line.quantity += q
             if (line.quantity <= 0) cart.lines.remove(line)
         }
-        dbCarts.document(customerModel.customerId + "-" + cart.business).set(cart)
+        dbCarts.document(customerModel.customerId + "-" + actualStore).set(cart)
         selectedCart.value = cart
         updateProductQttys()
     }
 
     fun addOrder(phone: String, mail: String, address: String = "") {
         customerModel.updateCustomer(phone, mail, address)
-        dbOrders.document(customerModel.customerId + "-" + actualStore).set(selectedCart.value!!)
-        // TODO save Order instead of cart
-        // TODO delete Cart
-//        EN REVISIÓN
-//        ordersC2B.document(selectedCart.value?.customer.toString()).delete()
+        val order = Order(address, customerModel.customerId!!, Date(), selectedCart.value!!.lines)
+        dbOrders.document(customerModel.customerId + "-" + actualStore).set(order)
+        deleteCart()
     }
 
     fun deleteCart() {
-
+        dbCarts.document(customerModel.customerId + "-" + actualStore).delete()
+        selectedCart.value?.lines?.clear()
+        updateProductQttys()
     }
 }
