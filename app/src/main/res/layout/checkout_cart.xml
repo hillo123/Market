@@ -7,52 +7,55 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:id="@+id/etPhone"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Introduzca su Numero Telefonico">
+        android:ems="10"
+        android:hint="Introduzca su Numero Telefonico"
+        android:inputType="text|phone"
+        android:paddingVertical="16dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text|phone" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:id="@+id/etMail"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ems="10"
         android:hint="Introduzca su e-mail"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textWebEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:inputType="textWebEmailAddress"
+        android:paddingVertical="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Modo de Entrega:"
         android:textColor="#000"
-        android:textSize="16sp" />
+        android:textSize="20sp"
+        android:layout_margin="8dp"/>
 
-    <Button
-        android:id="@+id/btnCheckoutStore"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Retiro en Tienda" />
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-    <Button
+        <Button
+            android:id="@+id/btnCheckoutStore"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Retiro en Tienda"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@android:color/holo_green_dark"/>
 
-        android:id="@+id/btnCheckoutDelivery"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Entrega a Domicilio" />
+        <Button
+
+            android:id="@+id/btnCheckoutDelivery"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Entrega a Domicilio"
+            android:backgroundTint="@android:color/holo_green_dark"/>
+    </LinearLayout>
 </LinearLayout>
