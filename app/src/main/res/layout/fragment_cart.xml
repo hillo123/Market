@@ -43,9 +43,10 @@
         <Button
             android:id="@+id/btnCheckout"
             style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
             android:text="Comprar"
+            android:textSize="20dp"
             app:backgroundTint="@android:color/holo_green_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout2" />

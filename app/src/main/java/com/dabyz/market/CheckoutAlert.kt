@@ -22,8 +22,8 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
     private lateinit var phone: String
     private lateinit var mail: String
     private fun validateAndSave(dialogView: View): Boolean {
-        phone = dialogView.etPhone.editText?.text.toString()
-        mail = dialogView.etMail.editText?.text.toString()
+        phone = dialogView.etPhone.text.toString()
+        mail = dialogView.etMail.text.toString()
         if (phone.isEmpty()) {
             //TODO completar validaciones de telefono
             fancyToast(R.layout.custom_toast_validating)

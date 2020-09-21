@@ -63,12 +63,17 @@ class ProductsFragment() : Fragment(R.layout.fragment_products) {
                     itemView.etPrice.text = price.toString()
                     Glide.with(main).load(photo).into(itemView.imgProduct)
                 }
-                itemView.tvQtty.text = productQtty.quantity.toString()
+                if (productQtty.quantity == 0) {
+                    itemView.tvQtty.text = ""
+                } else {
+                    itemView.tvQtty.text = productQtty.quantity.toString()
+                }
                 hideShowBtnRemove2Cart()
             }
+
             val checkout = itemView.btnRemove2Cart
             private fun hideShowBtnRemove2Cart() {
-                if (productQtty.quantity.toString() > "0") {
+                if (productQtty.quantity > 0) {
                     checkout.visibility = View.VISIBLE;
                 } else {
                     checkout.visibility = View.GONE;
