@@ -8,14 +8,17 @@
 
     <TextView
         android:id="@+id/txFragmentTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Fragment Title"
         android:textSize="30dp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@android:color/holo_orange_dark"
+        android:textColor="@android:color/white"
+        android:gravity="center"/>
 
     <FrameLayout
         android:id="@+id/flFragment"
@@ -34,5 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_menu" />
+        app:menu="@menu/bottom_menu"
+        app:itemTextColor="@android:color/holo_orange_dark"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
