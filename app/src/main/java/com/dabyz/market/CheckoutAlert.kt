@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.text.Layout
 import android.text.SpannableString
 import android.text.style.AlignmentSpan
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -12,6 +13,8 @@ import kotlinx.android.synthetic.main.checkout_cart_delivery.view.*
 import kotlinx.android.synthetic.main.custom_toast.*
 import kotlinx.android.synthetic.main.custom_toast.view.*
 import kotlinx.android.synthetic.main.custom_toast_validating.*
+import kotlin.math.log
+
 
 class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
     private fun fancyToast(layout: Int) = Toast(context).apply {
@@ -24,17 +27,19 @@ class CheckoutAlert(main: MainActivity) : AlertDialog(main) {
     private fun validateAndSave(dialogView: View): Boolean {
         phone = dialogView.etPhone.text.toString()
         mail = dialogView.etMail.text.toString()
-        if (phone.isEmpty()) {
-            //TODO completar validaciones de telefono
+
+        if (phone.isEmpty()||mail.isEmpty()) {
             fancyToast(R.layout.custom_toast_validating)
             return false
+        }else
+        {
+            return if(Patterns.EMAIL_ADDRESS.matcher(mail).matches()&&Patterns.PHONE.matcher(phone).matches()){
+                true
+            }else {
+                fancyToast(R.layout.custom_toast_validating)
+                false
+            }
         }
-        if (mail.isEmpty()) {
-            //TODO completar validaciones de Mail
-            fancyToast(R.layout.custom_toast_validating)
-            return false
-        }
-        return true
     }
 
     init {
